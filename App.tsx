@@ -1,8 +1,8 @@
 import React from 'react';
-import DashboardScreen from './src/screens/DashboardScreen';
+import NavigationWrapper from './src/navigation/AppNavigator';
 
 function App(): React.JSX.Element {
-  return <DashboardScreen />;
+  return <NavigationWrapper />;
 }
 
 export default App;
