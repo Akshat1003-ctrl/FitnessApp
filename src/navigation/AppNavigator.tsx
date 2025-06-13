@@ -3,14 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { Text, View, useColorScheme, StyleSheet } from 'react-native';
 
-// --- Placeholder Screens ---
-// In a real app, these would be your screen components from the /screens folder.
-// For now, we'll create simple placeholders.
-
 const PlaceholderScreen = ({ route }: { route: any }) => {
   const isDarkMode = useColorScheme() === 'dark';
-
-  // Define dynamic colors separately
   const viewStyle = {
     backgroundColor: isDarkMode ? '#1C1C1E' : '#F2F2F7',
   };
@@ -19,14 +13,12 @@ const PlaceholderScreen = ({ route }: { route: any }) => {
   };
 
   return (
-    // Combine static styles from StyleSheet with dynamic styles
     <View style={[styles.placeholderContainer, viewStyle]}>
       <Text style={[styles.placeholderText, textStyle]}>{route.name}</Text>
     </View>
   );
 };
 
-// --- Tab Navigator Setup ---
 const Tab = createBottomTabNavigator();
 
 function AppNavigator(): React.JSX.Element {
@@ -35,7 +27,7 @@ function AppNavigator(): React.JSX.Element {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: true, // Show a header for each screen
+        headerShown: true,
         headerStyle: {
           backgroundColor: isDarkMode ? '#1C1C1E' : '#FFFFFF',
         },
@@ -46,7 +38,7 @@ function AppNavigator(): React.JSX.Element {
           backgroundColor: isDarkMode ? '#1C1C1E' : '#FFFFFF',
           borderTopColor: isDarkMode ? '#3A3A3C' : '#D1D1D6',
         },
-        tabBarActiveTintColor: '#0A84FF', // A nice blue for the active tab
+        tabBarActiveTintColor: '#0A84FF',
         tabBarInactiveTintColor: 'gray',
       }}
     >
@@ -58,8 +50,6 @@ function AppNavigator(): React.JSX.Element {
   );
 }
 
-// --- Main Export ---
-// This component wraps the entire app in the NavigationContainer.
 export default function NavigationWrapper() {
   return (
     <NavigationContainer>
@@ -68,7 +58,6 @@ export default function NavigationWrapper() {
   );
 }
 
-// --- Styles for Placeholder ---
 const styles = StyleSheet.create({
   placeholderContainer: {
     flex: 1,
