@@ -1,49 +1,29 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Text, useTheme } from 'react-native-paper';
 
-function DashboardScreen(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const dynamicStyles = {
-    backgroundColor: isDarkMode ? '#1C1C1E' : '#F2F2F7',
-    textColor: {
-      color: isDarkMode ? '#FFFFFF' : '#000000',
-    },
-  };
+const DashboardScreen = () => {
+  const theme = useTheme();
 
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: dynamicStyles.backgroundColor },
-      ]}
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={dynamicStyles.backgroundColor}
-      />
-      <Text style={[styles.text, dynamicStyles.textColor]}>
-        Fitness App Dashboard
+      <Text
+        variant="headlineLarge"
+        style={{ color: theme.colors.onBackground }}
+      >
+        Dashboard
       </Text>
-    </SafeAreaView>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: '600',
   },
 });
 

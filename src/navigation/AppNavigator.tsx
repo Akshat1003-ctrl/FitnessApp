@@ -1,5 +1,3 @@
-// src/navigation/AppNavigator.tsx
-
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -8,79 +6,58 @@ import {
   useNavigation,
   NavigationProp,
 } from '@react-navigation/native';
-import { Text, View, StyleSheet } from 'react-native';
-import { Button as PaperButton, useTheme } from 'react-native-paper';
+import { Text, View, StyleSheet, Button } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-// Define the type for the stack navigator's params
+// Import the simple Home Screen
+import HomeScreen from '../screens/HomeScreen';
+
+// --- Type Definitions ---
 type WorkoutStackParamList = {
   WorkoutsList: undefined;
   StartWorkout: undefined;
 };
 
-// Define the type for the tabBarIcon props
 type TabBarIconProps = {
   color: string;
   size: number;
 };
 
-// --- Placeholder Screens ---
+// --- Helper for rendering icons ---
+const renderIcon =
+  (name: string) =>
+  ({ color, size }: TabBarIconProps) =>
+    <MaterialCommunityIcons name={name} color={color} size={size} />;
+
+// --- Placeholder & Reusable Components ---
 
 const WorkoutsListScreen = () => {
   const navigation = useNavigation<NavigationProp<WorkoutStackParamList>>();
   const theme = useTheme();
-
-  // Memoize the dynamic styles to prevent re-creation on each render
-  const viewStyle = React.useMemo(
-    () => ({
-      backgroundColor: theme.colors.background,
-    }),
-    [theme.colors.background],
-  );
-
-  const textStyle = React.useMemo(
-    () => ({
-      color: theme.colors.onBackground,
-    }),
-    [theme.colors.onBackground],
-  );
-
   return (
-    <View style={[styles.placeholderContainer, viewStyle]}>
-      <Text style={[styles.placeholderText, textStyle]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
+      <Text style={[styles.text, { color: theme.colors.onBackground }]}>
         Your Past Workouts
       </Text>
-      <PaperButton
-        mode="contained"
+      <Button
+        title="Start a New Workout"
         onPress={() => navigation.navigate('StartWorkout')}
-        icon="plus-circle"
-      >
-        Start a New Workout
-      </PaperButton>
+        color={theme.colors.primary}
+      />
     </View>
   );
 };
 
 const StartWorkoutScreen = () => {
   const theme = useTheme();
-
-  const viewStyle = React.useMemo(
-    () => ({
-      backgroundColor: theme.colors.background,
-    }),
-    [theme.colors.background],
-  );
-
-  const textStyle = React.useMemo(
-    () => ({
-      color: theme.colors.onBackground,
-    }),
-    [theme.colors.onBackground],
-  );
-
   return (
-    <View style={[styles.placeholderContainer, viewStyle]}>
-      <Text style={[styles.placeholderText, textStyle]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
+      <Text style={[styles.text, { color: theme.colors.onBackground }]}>
         New Workout Screen
       </Text>
     </View>
@@ -89,42 +66,24 @@ const StartWorkoutScreen = () => {
 
 const GenericTabScreen = ({ route }: { route: any }) => {
   const theme = useTheme();
-
-  const viewStyle = React.useMemo(
-    () => ({
-      backgroundColor: theme.colors.background,
-    }),
-    [theme.colors.background],
-  );
-
-  const textStyle = React.useMemo(
-    () => ({
-      color: theme.colors.onBackground,
-    }),
-    [theme.colors.onBackground],
-  );
-
   return (
-    <View style={[styles.placeholderContainer, viewStyle]}>
-      <Text style={[styles.placeholderText, textStyle]}>{route.name}</Text>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
+      <Text style={[styles.text, { color: theme.colors.onBackground }]}>
+        {route.name}
+      </Text>
     </View>
   );
 };
 
-// --- Stack Navigator for the Workouts Tab ---
-const Stack = createNativeStackNavigator<WorkoutStackParamList>();
-
-function WorkoutStackNavigator() {
+const WorkoutStackNavigator = () => {
   const theme = useTheme();
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.colors.surface,
-        },
-        headerTitleStyle: {
-          color: theme.colors.onSurface,
-        },
+        headerStyle: { backgroundColor: theme.colors.surface },
+        headerTitleStyle: { color: theme.colors.onSurface },
         headerTintColor: theme.colors.primary,
       }}
     >
@@ -140,82 +99,48 @@ function WorkoutStackNavigator() {
       />
     </Stack.Navigator>
   );
-}
+};
 
-// --- Main Tab Navigator ---
+// --- Navigators ---
+const Stack = createNativeStackNavigator<WorkoutStackParamList>();
 const Tab = createBottomTabNavigator();
 
 function AppTabs() {
   const theme = useTheme();
 
-  // Memoize the icon render functions so they are stable
-  const renderDashboardIcon = React.useCallback(
-    ({ color, size }: TabBarIconProps) => (
-      <MaterialCommunityIcons name="view-dashboard" color={color} size={size} />
-    ),
-    [],
-  );
-
-  const renderWorkoutsIcon = React.useCallback(
-    ({ color, size }: TabBarIconProps) => (
-      <MaterialCommunityIcons name="dumbbell" color={color} size={size} />
-    ),
-    [],
-  );
-
-  const renderNutritionIcon = React.useCallback(
-    ({ color, size }: TabBarIconProps) => (
-      <MaterialCommunityIcons name="food-apple" color={color} size={size} />
-    ),
-    [],
-  );
-
-  const renderProfileIcon = React.useCallback(
-    ({ color, size }: TabBarIconProps) => (
-      <MaterialCommunityIcons name="account-circle" color={color} size={size} />
-    ),
-    [],
-  );
-
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarActiveTintColor: theme.colors.primary,
         tabBarStyle: {
           backgroundColor: theme.colors.surface,
-          borderTopColor: theme.colors.outline,
         },
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: 'gray',
       }}
     >
       <Tab.Screen
-        name="Dashboard"
-        component={GenericTabScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
-          tabBarIcon: renderDashboardIcon,
+          headerShown: true,
+          headerTitle: 'Home',
+          tabBarIcon: renderIcon('view-dashboard'),
         }}
       />
       <Tab.Screen
         name="Workouts"
         component={WorkoutStackNavigator}
-        options={{
-          tabBarIcon: renderWorkoutsIcon,
-        }}
+        options={{ tabBarIcon: renderIcon('dumbbell') }}
       />
       <Tab.Screen
         name="Nutrition"
         component={GenericTabScreen}
-        options={{
-          tabBarIcon: renderNutritionIcon,
-        }}
+        options={{ tabBarIcon: renderIcon('food-apple') }}
       />
       <Tab.Screen
         name="Profile"
         component={GenericTabScreen}
-        options={{
-          tabBarIcon: renderProfileIcon,
-        }}
+        options={{ tabBarIcon: renderIcon('account-circle-outline') }}
       />
     </Tab.Navigator>
   );
@@ -232,16 +157,6 @@ export default function NavigationWrapper() {
 
 // --- Styles ---
 const styles = StyleSheet.create({
-  placeholderContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  placeholderText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  text: { fontSize: 24, fontWeight: 'bold', textAlign: 'center' },
 });
