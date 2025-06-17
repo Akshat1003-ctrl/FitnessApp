@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-FitnessApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-FitnessApp.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		318AB78D2DFEC09800901106 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 318AB78C2DFEC09800901106 /* MaterialCommunityIcons.ttf */; };
 		318AB78E2DFEC1F900901106 /* MaterialCommunityIcons.ttf in Frameworks */ = {isa = PBXBuildFile; fileRef = 318AB78C2DFEC09800901106 /* MaterialCommunityIcons.ttf */; };
 		6A8124C10F0F93E33C3EB406 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
@@ -163,7 +162,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				318AB78D2DFEC09800901106 /* MaterialCommunityIcons.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				6A8124C10F0F93E33C3EB406 /* PrivacyInfo.xcprivacy in Resources */,

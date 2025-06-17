@@ -6,11 +6,17 @@ import {
   useNavigation,
   NavigationProp,
 } from '@react-navigation/native';
-import { Text, View, StyleSheet, Button } from 'react-native';
+// Import the Image component from react-native
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  Image,
+  ImageSourcePropType,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-// Import the simple Home Screen
 import HomeScreen from '../screens/HomeScreen';
 
 // --- Type Definitions ---
@@ -20,15 +26,27 @@ type WorkoutStackParamList = {
 };
 
 type TabBarIconProps = {
+  focused: boolean;
   color: string;
   size: number;
 };
 
-// --- Helper for rendering icons ---
-const renderIcon =
-  (name: string) =>
-  ({ color, size }: TabBarIconProps) =>
-    <MaterialCommunityIcons name={name} color={color} size={size} />;
+// --- Helper for rendering custom PNG icons ---
+const renderPngIcon =
+  (source: ImageSourcePropType) =>
+  // By renaming 'focused' to '_focused', we tell the linter to ignore the unused variable.
+  ({ focused: _focused, color, size }: TabBarIconProps) => {
+    return (
+      <Image
+        source={source}
+        style={{
+          width: size,
+          height: size,
+          tintColor: color, // The tintColor will change based on the active state
+        }}
+      />
+    );
+  };
 
 // --- Placeholder & Reusable Components ---
 
@@ -112,7 +130,8 @@ function AppTabs() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: theme.colors.primary,
+        tabBarActiveTintColor: theme.colors.primary, // This color will be passed to the icon
+        tabBarInactiveTintColor: 'gray', // This color will be passed to the icon
         tabBarStyle: {
           backgroundColor: theme.colors.surface,
         },
@@ -124,23 +143,30 @@ function AppTabs() {
         options={{
           headerShown: true,
           headerTitle: 'Home',
-          tabBarIcon: renderIcon('view-dashboard'),
+          // Use require to load your local image file
+          tabBarIcon: renderPngIcon(require('../assets/images/home.png')),
         }}
       />
       <Tab.Screen
         name="Workouts"
         component={WorkoutStackNavigator}
-        options={{ tabBarIcon: renderIcon('dumbbell') }}
+        options={{
+          tabBarIcon: renderPngIcon(require('../assets/images/workout.png')),
+        }}
       />
       <Tab.Screen
         name="Nutrition"
         component={GenericTabScreen}
-        options={{ tabBarIcon: renderIcon('food-apple') }}
+        options={{
+          tabBarIcon: renderPngIcon(require('../assets/images/nutrition.png')),
+        }}
       />
       <Tab.Screen
         name="Profile"
         component={GenericTabScreen}
-        options={{ tabBarIcon: renderIcon('account-circle-outline') }}
+        options={{
+          tabBarIcon: renderPngIcon(require('../assets/images/account.png')),
+        }}
       />
     </Tab.Navigator>
   );
