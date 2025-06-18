@@ -11,7 +11,7 @@ import {
   List,
   Divider,
   MD3Theme,
-  Switch, // Import the Switch component
+  Switch,
 } from 'react-native-paper';
 
 // --- Main Profile Screen Component ---
@@ -24,7 +24,6 @@ const ProfileScreen = () => {
     React.useState(true);
 
   // --- Handler to toggle the switch state ---
-  // Wrap this function in useCallback to ensure it's stable across re-renders.
   const onToggleSwitch = React.useCallback(() => {
     setIsNotificationsEnabled(prev => !prev);
   }, []);
@@ -48,31 +47,31 @@ const ProfileScreen = () => {
 
   // --- Memoized Icon Render Functions ---
   const renderEditIcon = React.useCallback(
-    (props: { color: string }) => (
+    () => (
       <Image
         source={require('../assets/images/edit.png')}
-        style={[styles.editIcon, { tintColor: props.color }]}
+        style={[styles.menuIcon, { tintColor: theme.colors.onSurface }]}
       />
     ),
-    [styles.editIcon],
+    [styles.menuIcon, theme.colors.onSurface],
   );
   const renderLinkedIcon = React.useCallback(
-    (props: { color: string }) => (
+    () => (
       <Image
         source={require('../assets/images/link.png')}
-        style={[styles.linkIcon, { tintColor: props.color }]}
+        style={[styles.menuIcon, { tintColor: theme.colors.onSurface }]}
       />
     ),
-    [styles.linkIcon],
+    [styles.menuIcon, theme.colors.onSurface],
   );
   const renderLogoutPngIcon = React.useCallback(
-    (props: { color: string }) => (
+    () => (
       <Image
         source={require('../assets/images/logout.png')}
-        style={[styles.logoutIcon, { tintColor: props.color }]}
+        style={[styles.menuIcon, { tintColor: theme.colors.error }]}
       />
     ),
-    [styles.logoutIcon],
+    [styles.menuIcon, theme.colors.error],
   );
 
   // --- Memoized Component Render Functions ---
@@ -81,11 +80,6 @@ const ProfileScreen = () => {
       <Switch value={isNotificationsEnabled} onValueChange={onToggleSwitch} />
     ),
     [isNotificationsEnabled, onToggleSwitch],
-  );
-
-  const renderMemoizedLogoutIcon = React.useCallback(
-    () => renderLogoutPngIcon({ color: theme.colors.error }),
-    [theme.colors.error, renderLogoutPngIcon],
   );
 
   return (
@@ -164,7 +158,7 @@ const ProfileScreen = () => {
         <List.Item
           title="Sign Out"
           titleStyle={{ color: theme.colors.error }}
-          left={renderMemoizedLogoutIcon}
+          left={renderLogoutPngIcon}
           onPress={() => {}}
         />
       </View>
@@ -235,19 +229,8 @@ const createStyles = (theme: MD3Theme) =>
     menuWrapper: {
       marginTop: 10,
     },
-    editIcon: {
-      width: 24,
-      height: 24,
-      marginLeft: 16,
-      marginRight: 32,
-    },
-    linkIcon: {
-      width: 24,
-      height: 24,
-      marginLeft: 16,
-      marginRight: 32,
-    },
-    logoutIcon: {
+    // New unified style for all menu icons
+    menuIcon: {
       width: 24,
       height: 24,
       marginLeft: 16,
