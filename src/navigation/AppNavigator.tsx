@@ -18,6 +18,7 @@ import {
 import { useTheme } from 'react-native-paper';
 
 import HomeScreen from '../screens/HomeScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 // --- Type Definitions ---
 type WorkoutStackParamList = {
@@ -163,9 +164,11 @@ function AppTabs() {
       />
       <Tab.Screen
         name="Profile"
-        component={GenericTabScreen}
+        component={ProfileScreen} // <-- You will change this line
         options={{
           tabBarIcon: renderPngIcon(require('../assets/images/account.png')),
+          headerShown: true,
+          headerTitle: 'My Profile',
         }}
       />
     </Tab.Navigator>
