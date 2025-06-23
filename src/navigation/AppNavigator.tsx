@@ -1,127 +1,59 @@
+// src/navigation/AppNavigator.tsx
+
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { useTheme } from 'react-native-paper';
+// Import the Image component for our custom icons
 import {
-  NavigationContainer,
-  useNavigation,
-  NavigationProp,
-} from '@react-navigation/native';
-// Import the Image component from react-native
-import {
-  Text,
   View,
+  Text,
   StyleSheet,
-  Button,
   Image,
   ImageSourcePropType,
 } from 'react-native';
-import { useTheme } from 'react-native-paper';
 
+// Import your screens
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 // --- Type Definitions ---
-type WorkoutStackParamList = {
-  WorkoutsList: undefined;
-  StartWorkout: undefined;
-};
-
 type TabBarIconProps = {
-  focused: boolean;
+  focused: boolean; // We can use this if we want different styles when focused
   color: string;
   size: number;
 };
 
-// --- Helper for rendering custom PNG icons ---
+// --- Reusable Components ---
+// Placeholder for your workouts and nutrition screens
+const WorkoutScreen = () => (
+  <View style={styles.placeholder}>
+    <Text style={styles.placeholderText}>Workouts</Text>
+  </View>
+);
+const NutritionScreen = () => (
+  <View style={styles.placeholder}>
+    <Text style={styles.placeholderText}>Nutrition</Text>
+  </View>
+);
+
+// --- CORRECT Helper for rendering PNG icons ---
 const renderPngIcon =
   (source: ImageSourcePropType) =>
-  // By renaming 'focused' to '_focused', we tell the linter to ignore the unused variable.
-  ({ focused: _focused, color, size }: TabBarIconProps) => {
-    return (
+  ({ focused: _focused, color, size }: TabBarIconProps) =>
+    (
       <Image
         source={source}
         style={{
           width: size,
           height: size,
-          tintColor: color, // The tintColor will change based on the active state
+          tintColor: color, // This is key: it applies the active/inactive color
         }}
+        resizeMode="contain"
       />
     );
-  };
 
-// --- Placeholder & Reusable Components ---
-
-const WorkoutsListScreen = () => {
-  const navigation = useNavigation<NavigationProp<WorkoutStackParamList>>();
-  const theme = useTheme();
-  return (
-    <View
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-    >
-      <Text style={[styles.text, { color: theme.colors.onBackground }]}>
-        Your Past Workouts
-      </Text>
-      <Button
-        title="Start a New Workout"
-        onPress={() => navigation.navigate('StartWorkout')}
-        color={theme.colors.primary}
-      />
-    </View>
-  );
-};
-
-const StartWorkoutScreen = () => {
-  const theme = useTheme();
-  return (
-    <View
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-    >
-      <Text style={[styles.text, { color: theme.colors.onBackground }]}>
-        New Workout Screen
-      </Text>
-    </View>
-  );
-};
-
-const GenericTabScreen = ({ route }: { route: any }) => {
-  const theme = useTheme();
-  return (
-    <View
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-    >
-      <Text style={[styles.text, { color: theme.colors.onBackground }]}>
-        {route.name}
-      </Text>
-    </View>
-  );
-};
-
-const WorkoutStackNavigator = () => {
-  const theme = useTheme();
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: theme.colors.surface },
-        headerTitleStyle: { color: theme.colors.onSurface },
-        headerTintColor: theme.colors.primary,
-      }}
-    >
-      <Stack.Screen
-        name="WorkoutsList"
-        component={WorkoutsListScreen}
-        options={{ title: 'Workouts' }}
-      />
-      <Stack.Screen
-        name="StartWorkout"
-        component={StartWorkoutScreen}
-        options={{ title: 'New Workout' }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-// --- Navigators ---
-const Stack = createNativeStackNavigator<WorkoutStackParamList>();
+// --- Main Tab Navigator ---
 const Tab = createBottomTabNavigator();
 
 function AppTabs() {
@@ -131,10 +63,23 @@ function AppTabs() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: theme.colors.primary, // This color will be passed to the icon
-        tabBarInactiveTintColor: 'gray', // This color will be passed to the icon
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: 'gray',
+        tabBarShowLabel: true,
         tabBarStyle: {
+          position: 'absolute',
+          bottom: 50,
+          left: 30,
+          right: 30,
           backgroundColor: theme.colors.surface,
+          borderRadius: 60,
+          height: 54,
+          // --- Shadow Properties ---
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -3 }, // Negative height for top shadow
+          shadowOpacity: 0.2, // A bit more subtle than before
+          shadowRadius: 6,
+          elevation: 10, // Shadow for Android
         },
       }}
     >
@@ -144,31 +89,34 @@ function AppTabs() {
         options={{
           headerShown: true,
           headerTitle: 'Home',
-          // Use require to load your local image file
+          headerStyle: { backgroundColor: theme.colors.background },
+          headerTitleStyle: { color: theme.colors.onBackground },
           tabBarIcon: renderPngIcon(require('../assets/images/home.png')),
         }}
       />
       <Tab.Screen
         name="Workouts"
-        component={WorkoutStackNavigator}
+        component={WorkoutScreen} // Using the placeholder for now
         options={{
           tabBarIcon: renderPngIcon(require('../assets/images/workout.png')),
         }}
       />
       <Tab.Screen
         name="Nutrition"
-        component={GenericTabScreen}
+        component={NutritionScreen}
         options={{
           tabBarIcon: renderPngIcon(require('../assets/images/nutrition.png')),
         }}
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen} // <-- You will change this line
+        component={ProfileScreen}
         options={{
-          tabBarIcon: renderPngIcon(require('../assets/images/account.png')),
           headerShown: true,
           headerTitle: 'My Profile',
+          headerStyle: { backgroundColor: theme.colors.background },
+          headerTitleStyle: { color: theme.colors.onBackground },
+          tabBarIcon: renderPngIcon(require('../assets/images/account.png')),
         }}
       />
     </Tab.Navigator>
@@ -184,8 +132,8 @@ export default function NavigationWrapper() {
   );
 }
 
-// --- Styles ---
+// Simple styles for placeholder screens
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  text: { fontSize: 24, fontWeight: 'bold', textAlign: 'center' },
+  placeholder: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  placeholderText: { fontSize: 24 },
 });

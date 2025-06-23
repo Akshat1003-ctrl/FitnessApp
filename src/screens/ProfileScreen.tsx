@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { View, StyleSheet, ScrollView, Image } from 'react-native';
-// Import Switch and MD3Theme for type safety
+// Import necessary components from react-native-paper
 import {
   Text,
   useTheme,
@@ -16,6 +16,7 @@ import {
 
 // --- Main Profile Screen Component ---
 const ProfileScreen = () => {
+  // CORRECT: Use the global theme provided by PaperProvider in App.tsx
   const theme = useTheme();
   const styles = React.useMemo(() => createStyles(theme), [theme]);
 
@@ -28,7 +29,7 @@ const ProfileScreen = () => {
     setIsNotificationsEnabled(prev => !prev);
   }, []);
 
-  // --- Mock Data (will come from Firebase later) ---
+  // --- Mock Data ---
   const userData = {
     name: 'Akshat',
     age: 28,
@@ -55,6 +56,7 @@ const ProfileScreen = () => {
     ),
     [styles.menuIcon, theme.colors.onSurface],
   );
+
   const renderLinkedIcon = React.useCallback(
     () => (
       <Image
@@ -64,6 +66,7 @@ const ProfileScreen = () => {
     ),
     [styles.menuIcon, theme.colors.onSurface],
   );
+
   const renderLogoutPngIcon = React.useCallback(
     () => (
       <Image
@@ -77,9 +80,13 @@ const ProfileScreen = () => {
   // --- Memoized Component Render Functions ---
   const renderNotificationSwitch = React.useCallback(
     () => (
-      <Switch value={isNotificationsEnabled} onValueChange={onToggleSwitch} />
+      <Switch
+        value={isNotificationsEnabled}
+        onValueChange={onToggleSwitch}
+        color={theme.colors.primary} // CORRECTED: Use the primary color from your global theme
+      />
     ),
-    [isNotificationsEnabled, onToggleSwitch],
+    [isNotificationsEnabled, onToggleSwitch, theme.colors.primary],
   );
 
   return (
@@ -229,7 +236,6 @@ const createStyles = (theme: MD3Theme) =>
     menuWrapper: {
       marginTop: 10,
     },
-    // New unified style for all menu icons
     menuIcon: {
       width: 24,
       height: 24,
