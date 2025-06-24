@@ -4,7 +4,6 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
-// Import the Image component for our custom icons
 import {
   View,
   Text,
@@ -15,45 +14,39 @@ import {
 
 // Import your screens
 import HomeScreen from '../screens/HomeScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-
-// --- Type Definitions ---
-type TabBarIconProps = {
-  focused: boolean; // We can use this if we want different styles when focused
-  color: string;
-  size: number;
-};
+import NutritionScreen from '../screens/NutritionScreen';
+import ProfileScreen from '../screens/ProfileScreen'; // Import the new screen
 
 // --- Reusable Components ---
-// Placeholder for your workouts and nutrition screens
+// Placeholder for your workouts screen
 const WorkoutScreen = () => (
   <View style={styles.placeholder}>
     <Text style={styles.placeholderText}>Workouts</Text>
   </View>
 );
-const NutritionScreen = () => (
-  <View style={styles.placeholder}>
-    <Text style={styles.placeholderText}>Nutrition</Text>
-  </View>
-);
 
-// --- CORRECT Helper for rendering PNG icons ---
+type TabBarIconProps = {
+  focused: boolean;
+  color: string;
+  size: number;
+};
+
+// Helper for rendering PNG icons
 const renderPngIcon =
   (source: ImageSourcePropType) =>
-  ({ focused: _focused, color, size }: TabBarIconProps) =>
+  ({ color, size }: TabBarIconProps) =>
     (
       <Image
         source={source}
         style={{
           width: size,
           height: size,
-          tintColor: color, // This is key: it applies the active/inactive color
+          tintColor: color, // Applies active/inactive color
         }}
         resizeMode="contain"
       />
     );
 
-// --- Main Tab Navigator ---
 const Tab = createBottomTabNavigator();
 
 function AppTabs() {
@@ -63,40 +56,44 @@ function AppTabs() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: theme.colors.primary,
+        tabBarActiveTintColor: theme.colors.primary, // Your orange color
         tabBarInactiveTintColor: 'gray',
         tabBarShowLabel: true,
         tabBarStyle: {
           position: 'absolute',
-          bottom: 50,
-          left: 30,
-          right: 30,
+          // Adjusted values to better match the screenshot
+          bottom: 10,
+          left: 20,
+          right: 20,
           backgroundColor: theme.colors.surface,
-          borderRadius: 60,
-          height: 54,
-          // --- Shadow Properties ---
+          borderRadius: 0, // A less dramatic corner radius
+          height: 70, // A bit taller
+          // Shadow properties
           shadowColor: '#000',
-          shadowOffset: { width: 0, height: -3 }, // Negative height for top shadow
-          shadowOpacity: 0.2, // A bit more subtle than before
-          shadowRadius: 6,
-          elevation: 10, // Shadow for Android
+          shadowOffset: { width: 0, height: 5 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 10,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          marginBottom: 5,
+        },
+        tabBarIconStyle: {
+          marginTop: 5,
         },
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="Overview" // UPDATED
         component={HomeScreen}
         options={{
-          headerShown: true,
-          headerTitle: 'Home',
-          headerStyle: { backgroundColor: theme.colors.background },
-          headerTitleStyle: { color: theme.colors.onBackground },
           tabBarIcon: renderPngIcon(require('../assets/images/home.png')),
         }}
       />
       <Tab.Screen
-        name="Workouts"
-        component={WorkoutScreen} // Using the placeholder for now
+        name="Workout" // Name is "Workout" in screenshot
+        component={WorkoutScreen}
         options={{
           tabBarIcon: renderPngIcon(require('../assets/images/workout.png')),
         }}
@@ -105,25 +102,20 @@ function AppTabs() {
         name="Nutrition"
         component={NutritionScreen}
         options={{
-          tabBarIcon: renderPngIcon(require('../assets/images/nutrition.png')),
+          tabBarIcon: renderPngIcon(require('../assets/images/nutrition.png')), // Assumes this is the grid icon
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Profile" // UPDATED
+        component={ProfileScreen} // UPDATED
         options={{
-          headerShown: true,
-          headerTitle: 'My Profile',
-          headerStyle: { backgroundColor: theme.colors.background },
-          headerTitleStyle: { color: theme.colors.onBackground },
-          tabBarIcon: renderPngIcon(require('../assets/images/account.png')),
+          tabBarIcon: renderPngIcon(require('../assets/images/account.png')), // UPDATED
         }}
       />
     </Tab.Navigator>
   );
 }
 
-// --- Main Export ---
 export default function NavigationWrapper() {
   return (
     <NavigationContainer>
@@ -132,7 +124,6 @@ export default function NavigationWrapper() {
   );
 }
 
-// Simple styles for placeholder screens
 const styles = StyleSheet.create({
   placeholder: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   placeholderText: { fontSize: 24 },

@@ -1,246 +1,295 @@
-// src/screens/ProfileScreen.tsx
-
 import React from 'react';
-import { View, StyleSheet, ScrollView, Image } from 'react-native';
-// Import necessary components from react-native-paper
 import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  ImageSourcePropType,
+} from 'react-native';
+import {
+  Appbar,
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  ProgressBar,
   Text,
   useTheme,
-  Card,
-  Avatar,
-  List,
-  Divider,
   MD3Theme,
-  Switch,
 } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-// --- Main Profile Screen Component ---
-const ProfileScreen = () => {
-  // CORRECT: Use the global theme provided by PaperProvider in App.tsx
-  const theme = useTheme();
-  const styles = React.useMemo(() => createStyles(theme), [theme]);
+// --- FIX 1: Create a type for the GoalIcon component's props ---
+type GoalIconProps = {
+  iconName: string | null;
+  imageSource: ImageSourcePropType | null;
+  theme: MD3Theme;
+};
 
-  // --- State for the notification toggle ---
-  const [isNotificationsEnabled, setIsNotificationsEnabled] =
-    React.useState(true);
-
-  // --- Handler to toggle the switch state ---
-  const onToggleSwitch = React.useCallback(() => {
-    setIsNotificationsEnabled(prev => !prev);
-  }, []);
-
-  // --- Mock Data ---
-  const userData = {
-    name: 'Akshat',
-    age: 28,
-    height: '6\'0"',
-    weight: '180 lbs',
-    primaryGoal: 'Build Muscle',
-  };
-
-  const achievements = [
-    { id: 1, icon: 'trophy-award', name: 'First Workout' },
-    { id: 2, icon: 'run-fast', name: '5k Runner' },
-    { id: 3, icon: 'weight-lifter', name: 'New PR' },
-    { id: 4, icon: 'star-circle', name: '30-Day Streak' },
-    { id: 5, icon: 'calendar-check', name: 'Perfect Week' },
-  ];
-
-  // --- Memoized Icon Render Functions ---
-  const renderEditIcon = React.useCallback(
-    () => (
+// --- FIX 2: Move the GoalIcon component outside of ProfileScreen ---
+// This makes it a stable, reusable component and fixes the implicit 'any' type error.
+const GoalIcon = ({ iconName, imageSource, theme }: GoalIconProps) => {
+  // If an image source is provided, render an Image component.
+  if (imageSource) {
+    return (
       <Image
-        source={require('../assets/images/edit.png')}
-        style={[styles.menuIcon, { tintColor: theme.colors.onSurface }]}
+        source={imageSource}
+        style={{ width: 24, height: 24, tintColor: theme.colors.onSurface }}
       />
-    ),
-    [styles.menuIcon, theme.colors.onSurface],
-  );
-
-  const renderLinkedIcon = React.useCallback(
-    () => (
-      <Image
-        source={require('../assets/images/link.png')}
-        style={[styles.menuIcon, { tintColor: theme.colors.onSurface }]}
-      />
-    ),
-    [styles.menuIcon, theme.colors.onSurface],
-  );
-
-  const renderLogoutPngIcon = React.useCallback(
-    () => (
-      <Image
-        source={require('../assets/images/logout.png')}
-        style={[styles.menuIcon, { tintColor: theme.colors.error }]}
-      />
-    ),
-    [styles.menuIcon, theme.colors.error],
-  );
-
-  // --- Memoized Component Render Functions ---
-  const renderNotificationSwitch = React.useCallback(
-    () => (
-      <Switch
-        value={isNotificationsEnabled}
-        onValueChange={onToggleSwitch}
-        color={theme.colors.primary} // CORRECTED: Use the primary color from your global theme
-      />
-    ),
-    [isNotificationsEnabled, onToggleSwitch, theme.colors.primary],
-  );
-
+    );
+  }
+  // Otherwise, render an Icon from the vector library.
   return (
-    <ScrollView style={styles.container}>
-      {/* --- User Info Section --- */}
-      <View style={styles.userInfoSection}>
-        <Avatar.Image
-          size={80}
-          source={require('../assets/images/profile_placeholder.png')}
-        />
-        <View style={styles.userInfoText}>
-          <Text style={styles.title}>{userData.name}</Text>
-          <Text style={styles.caption}>
-            Primary Goal: {userData.primaryGoal}
-          </Text>
-        </View>
-      </View>
-
-      {/* --- Physical Stats Section --- */}
-      <View style={styles.statsRow}>
-        <View style={styles.statBox}>
-          <Text style={[styles.statValue, { color: theme.colors.primary }]}>
-            {userData.height}
-          </Text>
-          <Text style={styles.statLabel}>Height</Text>
-        </View>
-        <View style={styles.statBox}>
-          <Text style={[styles.statValue, { color: theme.colors.primary }]}>
-            {userData.weight}
-          </Text>
-          <Text style={styles.statLabel}>Weight</Text>
-        </View>
-        <View style={styles.statBox}>
-          <Text style={[styles.statValue, { color: theme.colors.primary }]}>
-            {userData.age}
-          </Text>
-          <Text style={styles.statLabel}>Age</Text>
-        </View>
-      </View>
-
-      {/* --- Achievements Section --- */}
-      <Card style={styles.card}>
-        <Card.Title title="Achievements" titleStyle={styles.cardTitle} />
-        <Card.Content>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {achievements.map(item => (
-              <View key={item.id} style={styles.badge}>
-                <Avatar.Icon
-                  size={50}
-                  icon={item.icon}
-                  style={{ backgroundColor: theme.colors.surfaceVariant }}
-                />
-                <Text style={styles.badgeName}>{item.name}</Text>
-              </View>
-            ))}
-          </ScrollView>
-        </Card.Content>
-      </Card>
-
-      {/* --- Settings Menu Section --- */}
-      <View style={styles.menuWrapper}>
-        <List.Item title="Notifications" right={renderNotificationSwitch} />
-        <Divider />
-        <List.Item
-          title="Edit Profile"
-          left={renderEditIcon}
-          onPress={() => {}}
-        />
-        <Divider />
-        <List.Item
-          title="Linked Accounts"
-          left={renderLinkedIcon}
-          onPress={() => {}}
-        />
-        <Divider />
-        <List.Item
-          title="Sign Out"
-          titleStyle={{ color: theme.colors.error }}
-          left={renderLogoutPngIcon}
-          onPress={() => {}}
-        />
-      </View>
-    </ScrollView>
+    <Icon name={iconName || ''} size={24} color={theme.colors.onSurface} />
   );
 };
 
-// --- Styles ---
+const ProfileScreen = () => {
+  const theme = useTheme();
+  const styles = createStyles(theme);
+
+  const profileData = {
+    name: 'Akshat Chandra',
+    subtitle: 'Fitness Enthusiast',
+    joinDate: 'Joined 2021',
+    avatar: require('../assets/images/profile_placeholder.png'),
+    stats: [
+      { id: 1, value: '150', label: 'Workouts' },
+      { id: 2, value: '30', label: 'Friends' },
+      { id: 3, value: '200', label: 'Challenges' },
+    ],
+    goals: [
+      {
+        id: 1,
+        icon: null,
+        image: require('../assets/images/calander.png'),
+        title: 'Weekly Workouts',
+        description: '5 workouts per week',
+      },
+      {
+        id: 2,
+        icon: null,
+        image: require('../assets/images/unbalance_weight.png'),
+        title: 'Weight Loss',
+        description: 'Lose 10 lbs',
+      },
+      {
+        id: 3,
+        icon: null,
+        image: require('../assets/images/footsteps.png'),
+        title: 'Running Goal',
+        description: 'Run a marathon',
+      },
+    ],
+    progress: [
+      { id: 1, title: 'Weekly Workouts', value: 3 / 4, label: '3/4 completed' },
+      { id: 2, title: 'Weight Loss', value: 5 / 10, label: '5/10 lbs lost' },
+      { id: 3, title: 'Running Goal', value: 5 / 20, label: '5/20 miles run' },
+    ],
+  };
+
+  return (
+    <View style={styles.screen}>
+      <Appbar.Header style={styles.appbar}>
+        <Appbar.Content title="Profile" titleStyle={styles.appbarTitle} />
+        <Appbar.Action icon="cog-outline" onPress={() => {}} />
+      </Appbar.Header>
+
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* --- User Info Section --- */}
+        <View style={styles.userInfoSection}>
+          <Avatar.Image size={100} source={profileData.avatar} />
+          <Text variant="headlineMedium" style={styles.userName}>
+            {profileData.name}
+          </Text>
+          <Text variant="bodyLarge" style={styles.userSubtitle}>
+            {profileData.subtitle}
+          </Text>
+          <Text variant="bodyMedium" style={styles.userJoinDate}>
+            {profileData.joinDate}
+          </Text>
+        </View>
+
+        {/* --- Edit Profile Button --- */}
+        <Button
+          mode="contained"
+          onPress={() => {}}
+          style={styles.editButton}
+          labelStyle={styles.editButtonLabel}
+          buttonColor={theme.colors.surface}
+          textColor={theme.colors.onSurface}
+        >
+          Edit Profile
+        </Button>
+
+        {/* --- Stats Section --- */}
+        <View style={styles.statsContainer}>
+          {profileData.stats.map(stat => (
+            <Card key={stat.id} style={styles.statCard}>
+              <Card.Content style={styles.statContent}>
+                <Text variant="headlineMedium">{stat.value}</Text>
+                <Text
+                  variant="bodySmall"
+                  //@ts-ignore
+                  style={{ color: theme.colors.secondaryText }}
+                >
+                  {stat.label}
+                </Text>
+              </Card.Content>
+            </Card>
+          ))}
+        </View>
+
+        {/* --- Goals Section --- */}
+        <Text variant="headlineSmall" style={styles.sectionHeader}>
+          Goals
+        </Text>
+        <Card style={styles.listCard}>
+          {profileData.goals.map((goal, index) => (
+            <React.Fragment key={goal.id}>
+              <View style={styles.goalItem}>
+                <View style={styles.goalIconContainer}>
+                  <GoalIcon
+                    iconName={goal.icon}
+                    imageSource={goal.image}
+                    theme={theme}
+                  />
+                </View>
+                <View style={styles.goalTextContainer}>
+                  <Text variant="titleMedium">{goal.title}</Text>
+                  <Text
+                    variant="bodyMedium"
+                    //@ts-ignore
+                    style={{ color: theme.colors.secondaryText }}
+                  >
+                    {goal.description}
+                  </Text>
+                </View>
+              </View>
+              {index < profileData.goals.length - 1 && <Divider />}
+            </React.Fragment>
+          ))}
+        </Card>
+
+        {/* --- Progress Section --- */}
+        <Text variant="headlineSmall" style={styles.sectionHeader}>
+          Progress
+        </Text>
+        <Card style={styles.listCard}>
+          {profileData.progress.map(item => (
+            <View key={item.id} style={styles.progressItem}>
+              <Text variant="titleMedium">{item.title}</Text>
+              <ProgressBar
+                progress={item.value}
+                color={theme.colors.primary}
+                style={styles.progressBar}
+              />
+              <Text
+                variant="bodySmall"
+                //@ts-ignore
+                style={{ color: theme.colors.secondaryText }}
+              >
+                {item.label}
+              </Text>
+            </View>
+          ))}
+        </Card>
+      </ScrollView>
+    </View>
+  );
+};
+
 const createStyles = (theme: MD3Theme) =>
   StyleSheet.create({
-    container: {
+    screen: {
       flex: 1,
       backgroundColor: theme.colors.background,
     },
+    appbar: {
+      backgroundColor: theme.colors.background,
+      elevation: 0,
+    },
+    appbarTitle: {
+      fontWeight: 'bold',
+    },
+    container: {
+      padding: 16,
+      paddingBottom: 120,
+    },
     userInfoSection: {
-      paddingHorizontal: 30,
-      marginTop: 20,
-      marginBottom: 25,
+      alignItems: 'center',
+      marginBottom: 24,
+    },
+    userName: {
+      marginTop: 16,
+      fontWeight: 'bold',
+    },
+    userSubtitle: {
+      marginTop: 4,
+      //@ts-ignore
+      color: theme.colors.secondaryText,
+    },
+    userJoinDate: {
+      marginTop: 4,
+      //@ts-ignore
+      color: theme.colors.secondaryText,
+    },
+    editButton: {
+      borderRadius: 50,
+      paddingVertical: 6,
+      marginBottom: 24,
+    },
+    editButtonLabel: {
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    statsContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 24,
+    },
+    statCard: {
+      width: '32%',
+      backgroundColor: theme.colors.surface,
+    },
+    statContent: {
+      alignItems: 'center',
+      paddingHorizontal: 4,
+      paddingVertical: 16,
+    },
+    sectionHeader: {
+      fontWeight: 'bold',
+      marginBottom: 16,
+    },
+    listCard: {
+      backgroundColor: theme.colors.surface,
+      marginBottom: 24,
+    },
+    goalItem: {
       flexDirection: 'row',
       alignItems: 'center',
+      padding: 16,
     },
-    userInfoText: {
-      marginLeft: 20,
-    },
-    title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      color: theme.colors.onBackground,
-    },
-    caption: {
-      fontSize: 14,
-      lineHeight: 14,
-      fontWeight: '500',
-      color: theme.colors.onSurfaceVariant,
-    },
-    statsRow: {
-      flexDirection: 'row',
-      marginBottom: 20,
-      justifyContent: 'space-around',
-    },
-    statBox: {
+    goalIconContainer: {
+      backgroundColor: theme.colors.surfaceVariant,
+      borderRadius: 8,
+      padding: 12,
+      marginRight: 16,
+      width: 48,
+      height: 48,
       alignItems: 'center',
       justifyContent: 'center',
     },
-    statValue: {
-      fontSize: 20,
-      fontWeight: 'bold',
+    goalTextContainer: {
+      flex: 1,
     },
-    statLabel: {
-      fontSize: 15,
-      color: theme.colors.onSurfaceVariant,
+    progressItem: {
+      padding: 16,
     },
-    card: {
-      marginHorizontal: 15,
-      marginBottom: 20,
-    },
-    cardTitle: {
-      fontWeight: 'bold',
-    },
-    badge: {
-      alignItems: 'center',
-      marginRight: 20,
-    },
-    badgeName: {
-      marginTop: 5,
-      fontSize: 12,
-    },
-    menuWrapper: {
-      marginTop: 10,
-    },
-    menuIcon: {
-      width: 24,
-      height: 24,
-      marginLeft: 16,
-      marginRight: 32,
+    progressBar: {
+      height: 8,
+      borderRadius: 4,
+      marginVertical: 8,
     },
   });
 

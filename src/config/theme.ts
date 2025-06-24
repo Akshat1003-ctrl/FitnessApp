@@ -5,41 +5,55 @@ import {
   MD3DarkTheme as DefaultDarkTheme,
 } from 'react-native-paper';
 
-// Simplified color palette
+// Define your new color palette
 const themeColors = {
-  primary: '#BBF246', // Lime Green
-  darkCharcoal: '#192126',
-  secondaryText: '#8B8F92',
+  blue: '#3895D3', // Your primary brand color
+  darkGrey: '#333333', // A dark grey for surfaces in dark mode
+  mediumGrey: '#888888', // For secondary text or icons
+  lightGrey: '#F5F5F5', // For card backgrounds in light mode
+  white: '#FFFFFF',
+  black: '#000000',
+  green: '#4CAF50',
 };
 
+// --- LIGHT THEME ---
 export const lightTheme = {
   ...DefaultLightTheme,
-  roundness: 20, // More rounded corners to match the design
+  roundness: 4,
   colors: {
+    // Standard properties
     ...DefaultLightTheme.colors,
-    primary: themeColors.primary,
-    onPrimary: themeColors.darkCharcoal,
-    background: '#F7F7F7', // Off-white background from the design
-    surface: '#FFFFFF', // Cards are pure white
-    onSurface: themeColors.darkCharcoal,
-    onBackground: themeColors.darkCharcoal,
-    onSurfaceVariant: themeColors.secondaryText,
-    // All other custom colors have been removed
+    primary: themeColors.blue, // Main interactive color
+    background: themeColors.white, // App background
+    surface: themeColors.white, // Surface of components like AppBar
+    onSurface: themeColors.black, // Text on surfaces
+    onBackground: themeColors.black, // Body text
+    notificationGreen: themeColors.green, //Notification Toggle
+
+    // Custom properties for specific control
+    cardBackground: themeColors.lightGrey, // Specific color for cards
+    ctaButton: themeColors.blue, // Color for "Call to Action" buttons
+    secondaryText: themeColors.mediumGrey,
   },
 };
 
+// --- DARK THEME ---
 export const darkTheme = {
   ...DefaultDarkTheme,
-  roundness: 20,
+  roundness: 4,
   colors: {
+    // Standard properties
     ...DefaultDarkTheme.colors,
-    primary: themeColors.primary,
-    onPrimary: themeColors.darkCharcoal,
-    background: '#121212', // A standard dark background
-    surface: themeColors.darkCharcoal,
-    onSurface: '#FFFFFF',
-    onBackground: '#FFFFFF',
-    onSurfaceVariant: themeColors.secondaryText,
-    // All other custom colors have been removed
+    primary: themeColors.blue, // Main interactive color
+    background: themeColors.black, // App background
+    surface: themeColors.darkGrey, // Surface of components like AppBar
+    onSurface: themeColors.white, // Text on surfaces
+    onBackground: themeColors.white, // Body text
+    notificationGreen: themeColors.green, //Notification Toggele
+
+    // Custom properties for specific control
+    cardBackground: themeColors.darkGrey, // Specific color for cards
+    ctaButton: themeColors.blue, // Color for "Call to Action" buttons
+    secondaryText: themeColors.mediumGrey,
   },
 };
