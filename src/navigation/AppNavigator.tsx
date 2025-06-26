@@ -59,25 +59,17 @@ function AppTabs() {
         tabBarActiveTintColor: theme.colors.primary, // Your orange color
         tabBarInactiveTintColor: 'gray',
         tabBarShowLabel: true,
+        // --- UPDATED tabBarStyle for a fixed bottom bar ---
         tabBarStyle: {
-          position: 'absolute',
-          // Adjusted values to better match the screenshot
-          bottom: 10,
-          left: 20,
-          right: 20,
           backgroundColor: theme.colors.surface,
-          borderRadius: 0, // A less dramatic corner radius
-          height: 70, // A bit taller
-          // Shadow properties
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 5 },
-          shadowOpacity: 0.1,
-          shadowRadius: 8,
-          elevation: 10,
+          height: 80, // A bit taller
+          borderTopWidth: 0, // Removes the top border line
+          elevation: 10, // Keeps a subtle shadow on Android
+          shadowOpacity: 0.1, // Keeps a subtle shadow on iOS
         },
         tabBarLabelStyle: {
           fontSize: 12,
-          marginBottom: 5,
+          paddingBottom: 5,
         },
         tabBarIconStyle: {
           marginTop: 5,

@@ -34,6 +34,7 @@ const GoalIcon = ({ iconName, imageSource, theme }: GoalIconProps) => {
     return (
       <Image
         source={imageSource}
+        // eslint-disable-next-line react-native/no-inline-styles
         style={{ width: 24, height: 24, tintColor: theme.colors.onSurface }}
       />
     );
